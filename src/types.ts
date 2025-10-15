@@ -31,6 +31,15 @@ export interface ScoutConfig {
   cycles?: number; // Number of Scout->Witness cycles to run (Campaign only)
   campaignScoutInstructions?: string; // Instructions for the Campaign's Scout phase
   campaignWitnessInstructions?: string; // Instructions for the Campaign's Witness phase
+  campaignScoutVision?: number; // Vision for Campaign's Scout phase
+  campaignScoutRange?: number; // Range for Campaign's Scout phase
+  campaignScoutDepth?: number; // Depth for Campaign's Scout phase
+  campaignWitnessVision?: number; // Vision for Campaign's Witness phase
+  campaignWitnessRange?: number; // Range for Campaign's Witness phase
+  campaignWitnessDepth?: number; // Depth for Campaign's Witness phase
+  shotgunEnabled?: boolean; // Enable shotgun mode
+  shotgunLayers?: number; // Number of initial layers to shotgun (1-10)
+  shotgunRanges?: number[]; // Array of ranges for each shotgunned layer
 }
 
 export interface CopilotConfig {

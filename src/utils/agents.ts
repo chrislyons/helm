@@ -326,11 +326,21 @@ export async function runScout(
       // Get fresh tree reference if available
       const currentTree = getTree ? getTree() : tree;
 
+      // Determine the range to use based on shotgun settings
+      let rangeToUse = config.range;
+      if (config.shotgunEnabled && config.shotgunLayers && config.shotgunRanges) {
+        // Check if current depth is within shotgun layers
+        if (depth <= config.shotgunLayers) {
+          // Use the shotgun range for this layer (depth is 1-indexed)
+          rangeToUse = config.shotgunRanges[depth - 1] || config.range;
+        }
+      }
+
       // Expand the node
       const childIds = await expandNode(
         currentTree,
         nodeId,
-        config.range,
+        rangeToUse,
         apiKey,
         settings,
         (id) => lockNode(id, 'scout-active'),
@@ -824,23 +834,31 @@ export async function runCampaign(
         onOutput(`Campaign cycle ${cycle + 1}/${cycles} starting...`);
       }
 
+      // Get Scout-specific settings (use campaign overrides if available)
+      const scoutVision = config.campaignScoutVision ?? config.vision;
+      const scoutRange = config.campaignScoutRange ?? config.range;
+      const scoutDepth = config.campaignScoutDepth ?? config.depth;
+
       // Create a private Scout config (not saved to user's scout list)
       const privateScoutConfig: ScoutConfig = {
         id: `campaign_scout_${Date.now()}`,
         name: 'Campaign Scout (private)',
         type: 'Scout',
         instructions: campaignScoutInstructions,
-        vision: config.vision,
-        range: config.range,
-        depth: config.depth,
+        vision: scoutVision,
+        range: scoutRange,
+        depth: scoutDepth,
         active: true,
         activeNodeId: startNodeId,
         outputs: [],
+        shotgunEnabled: config.shotgunEnabled,
+        shotgunLayers: config.shotgunLayers,
+        shotgunRanges: config.shotgunRanges,
       };
 
       // Run Scout phase with normal scout locking
       if (onOutput) {
-        onOutput(`  Scout phase: exploring with vision=${config.vision}, range=${config.range}, depth=${config.depth}`);
+        onOutput(`  Scout phase: exploring with vision=${scoutVision}, range=${scoutRange}, depth=${scoutDepth}`);
       }
 
       await runScout(
@@ -877,7 +895,10 @@ export async function runCampaign(
         onOutput(`  Witness phase: starting from deepest node at depth=${maxDepth}`);
       }
 
-      // Use the recalculated depth for Witness
+      // Get Witness-specific settings (use campaign overrides if available)
+      const witnessVision = config.campaignWitnessVision ?? config.vision;
+      const witnessRange = config.campaignWitnessRange ?? config.range;
+      // Witness depth is automatically determined by Scout phase depth
       const witnessDepth = maxDepth;
 
       // Create a private Witness config
@@ -886,8 +907,8 @@ export async function runCampaign(
         name: 'Campaign Witness (private)',
         type: 'Witness',
         instructions: campaignWitnessInstructions,
-        vision: config.vision,
-        range: config.range,
+        vision: witnessVision,
+        range: witnessRange,
         depth: witnessDepth,
         active: true,
         activeNodeId: deepestNodeId,

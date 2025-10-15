@@ -293,45 +293,250 @@ const Scout: React.FC = () => {
                   </select>
                 </div>
 
-                {scout.type === 'Campaign' ? (
+{scout.type === 'Campaign' ? (
                   <>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Cycles
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="100"
-                        value={scout.cycles || 1}
-                        onChange={(e) => updateScout(scout.id, { cycles: parseInt(e.target.value) })}
-                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                        disabled={scout.active}
-                      />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Cycles
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="100"
+                          value={scout.cycles || 1}
+                          onChange={(e) => updateScout(scout.id, { cycles: parseInt(e.target.value) })}
+                          className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                          disabled={scout.active}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Button
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="9"
+                          value={scout.buttonNumber || ''}
+                          onChange={(e) =>
+                            updateScout(scout.id, {
+                              buttonNumber: e.target.value ? parseInt(e.target.value) : undefined,
+                            })
+                          }
+                          placeholder="None"
+                          className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                          disabled={scout.active}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Scout Instructions
-                      </label>
-                      <textarea
-                        value={scout.campaignScoutInstructions ?? scout.instructions ?? ''}
-                        onChange={(e) => updateScout(scout.id, { campaignScoutInstructions: e.target.value })}
-                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                        rows={3}
-                        disabled={scout.active}
-                      />
+
+                    <div className="border-t border-gray-200 pt-2">
+                      <h4 className="text-xs font-semibold text-gray-800 mb-2">Scout Phase Settings</h4>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Scout Instructions
+                        </label>
+                        <textarea
+                          value={scout.campaignScoutInstructions ?? scout.instructions ?? ''}
+                          onChange={(e) => updateScout(scout.id, { campaignScoutInstructions: e.target.value })}
+                          className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                          rows={3}
+                          disabled={scout.active}
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 mt-2">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Vision</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.campaignScoutVision ?? scout.vision}
+                            onChange={(e) => {
+                              const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                              updateScout(scout.id, {
+                                campaignScoutVision: value !== undefined && !isNaN(value) ? value : undefined
+                              });
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Range</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.campaignScoutRange ?? scout.range}
+                            onChange={(e) => {
+                              const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                              updateScout(scout.id, {
+                                campaignScoutRange: value !== undefined && !isNaN(value) ? value : undefined
+                              });
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Depth</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.campaignScoutDepth ?? scout.depth}
+                            onChange={(e) => {
+                              const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                              updateScout(scout.id, {
+                                campaignScoutDepth: value !== undefined && !isNaN(value) ? value : undefined
+                              });
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Shotgun mode for Campaign Scout Phase */}
+                      <div className="flex items-center gap-2 mt-2 mb-2">
+                        <input
+                          type="checkbox"
+                          id={`shotgun-${scout.id}`}
+                          checked={scout.shotgunEnabled || false}
+                          onChange={(e) => {
+                            const enabled = e.target.checked;
+                            updateScout(scout.id, {
+                              shotgunEnabled: enabled,
+                              shotgunLayers: enabled ? (scout.shotgunLayers || 1) : undefined,
+                              shotgunRanges: enabled ? (scout.shotgunRanges || [6]) : undefined,
+                            });
+                          }}
+                          className="rounded border-gray-300 focus:ring-sky-dark"
+                          disabled={scout.active}
+                        />
+                        <label htmlFor={`shotgun-${scout.id}`} className="text-xs font-medium text-gray-700">
+                          Enable Shotgun
+                        </label>
+                      </div>
+
+                      {scout.shotgunEnabled && (
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Initial Layers to Shotgun
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              max="10"
+                              value={scout.shotgunLayers || 1}
+                              onChange={(e) => {
+                                const value = parseInt(e.target.value);
+                                // Only update if value is valid
+                                if (!isNaN(value)) {
+                                  // Clamp value between 1 and 10
+                                  const newLayers = Math.min(10, Math.max(1, value));
+                                  const currentRanges = scout.shotgunRanges || [6];
+                                  const newRanges = Array.from({ length: newLayers }, (_, i) =>
+                                    currentRanges[i] !== undefined ? currentRanges[i] : 6
+                                  );
+                                  updateScout(scout.id, {
+                                    shotgunLayers: newLayers,
+                                    shotgunRanges: newRanges,
+                                  });
+                                }
+                              }}
+                              onBlur={(e) => {
+                                // Enforce bounds on blur in case user typed invalid value
+                                const value = parseInt(e.target.value);
+                                if (isNaN(value) || value < 1 || value > 10) {
+                                  const newLayers = Math.min(10, Math.max(1, scout.shotgunLayers || 1));
+                                  updateScout(scout.id, { shotgunLayers: newLayers });
+                                }
+                              }}
+                              className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                              disabled={scout.active}
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            {Array.from({ length: scout.shotgunLayers || 1 }).map((_, index) => (
+                              <div key={index}>
+                                <label className="block text-xs font-medium text-gray-700 mb-1">
+                                  Range for Layer {index + 1}
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max="100"
+                                  value={(scout.shotgunRanges || [6])[index] || 6}
+                                  onChange={(e) => {
+                                    const newRanges = [...(scout.shotgunRanges || [6])];
+                                    newRanges[index] = parseInt(e.target.value);
+                                    updateScout(scout.id, { shotgunRanges: newRanges });
+                                  }}
+                                  className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                                  disabled={scout.active}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Witness Instructions
-                      </label>
-                      <textarea
-                        value={scout.campaignWitnessInstructions ?? scout.instructions ?? ''}
-                        onChange={(e) => updateScout(scout.id, { campaignWitnessInstructions: e.target.value })}
-                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                        rows={3}
-                        disabled={scout.active}
-                      />
+
+                    <div className="border-t border-gray-200 pt-2">
+                      <h4 className="text-xs font-semibold text-gray-800 mb-2">Witness Phase Settings</h4>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Witness Instructions
+                        </label>
+                        <textarea
+                          value={scout.campaignWitnessInstructions ?? scout.instructions ?? ''}
+                          onChange={(e) => updateScout(scout.id, { campaignWitnessInstructions: e.target.value })}
+                          className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                          rows={3}
+                          disabled={scout.active}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Vision</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.campaignWitnessVision ?? scout.vision}
+                            onChange={(e) => {
+                              const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                              updateScout(scout.id, {
+                                campaignWitnessVision: value !== undefined && !isNaN(value) ? value : undefined
+                              });
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Range</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.campaignWitnessRange ?? scout.range}
+                            onChange={(e) => {
+                              const value = e.target.value === '' ? undefined : parseInt(e.target.value);
+                              updateScout(scout.id, {
+                                campaignWitnessRange: value !== undefined && !isNaN(value) ? value : undefined
+                              });
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -349,66 +554,160 @@ const Scout: React.FC = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-4 gap-2">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Vision</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={scout.vision}
-                      onChange={(e) => updateScout(scout.id, { vision: parseInt(e.target.value) })}
-                      className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                      disabled={scout.active}
-                    />
-                  </div>
+                {/* Only show these settings for non-Campaign types */}
+                {scout.type !== 'Campaign' && (
+                  <div className="grid grid-cols-4 gap-2">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Vision</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={scout.vision}
+                        onChange={(e) => updateScout(scout.id, { vision: parseInt(e.target.value) })}
+                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                        disabled={scout.active}
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Range</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={scout.range}
-                      onChange={(e) => updateScout(scout.id, { range: parseInt(e.target.value) })}
-                      className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                      disabled={scout.active}
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Range</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={scout.range}
+                        onChange={(e) => updateScout(scout.id, { range: parseInt(e.target.value) })}
+                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                        disabled={scout.active}
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Depth</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={scout.depth}
-                      onChange={(e) => updateScout(scout.id, { depth: parseInt(e.target.value) })}
-                      className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                      disabled={scout.active}
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Depth</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={scout.depth}
+                        onChange={(e) => updateScout(scout.id, { depth: parseInt(e.target.value) })}
+                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                        disabled={scout.active}
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
-                      Button
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="9"
-                      value={scout.buttonNumber || ''}
-                      onChange={(e) =>
-                        updateScout(scout.id, {
-                          buttonNumber: e.target.value ? parseInt(e.target.value) : undefined,
-                        })
-                      }
-                      placeholder="None"
-                      className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
-                      disabled={scout.active}
-                    />
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        Button
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="9"
+                        value={scout.buttonNumber || ''}
+                        onChange={(e) =>
+                          updateScout(scout.id, {
+                            buttonNumber: e.target.value ? parseInt(e.target.value) : undefined,
+                          })
+                        }
+                        placeholder="None"
+                        className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                        disabled={scout.active}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* Shotgun mode - only for Scout type */}
+                {scout.type === 'Scout' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id={`shotgun-${scout.id}`}
+                        checked={scout.shotgunEnabled || false}
+                        onChange={(e) => {
+                          const enabled = e.target.checked;
+                          updateScout(scout.id, {
+                            shotgunEnabled: enabled,
+                            shotgunLayers: enabled ? (scout.shotgunLayers || 1) : undefined,
+                            shotgunRanges: enabled ? (scout.shotgunRanges || [6]) : undefined,
+                          });
+                        }}
+                        className="rounded border-gray-300 focus:ring-sky-dark"
+                        disabled={scout.active}
+                      />
+                      <label htmlFor={`shotgun-${scout.id}`} className="text-xs font-medium text-gray-700">
+                        Enable Shotgun
+                      </label>
+                    </div>
+
+                    {scout.shotgunEnabled && (
+                      <>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">
+                            Initial Layers to Shotgun
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            value={scout.shotgunLayers || 1}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value);
+                              // Only update if value is valid
+                              if (!isNaN(value)) {
+                                // Clamp value between 1 and 10
+                                const newLayers = Math.min(10, Math.max(1, value));
+                                const currentRanges = scout.shotgunRanges || [6];
+                                const newRanges = Array.from({ length: newLayers }, (_, i) =>
+                                  currentRanges[i] !== undefined ? currentRanges[i] : 6
+                                );
+                                updateScout(scout.id, {
+                                  shotgunLayers: newLayers,
+                                  shotgunRanges: newRanges,
+                                });
+                              }
+                            }}
+                            onBlur={(e) => {
+                              // Enforce bounds on blur in case user typed invalid value
+                              const value = parseInt(e.target.value);
+                              if (isNaN(value) || value < 1 || value > 10) {
+                                const newLayers = Math.min(10, Math.max(1, scout.shotgunLayers || 1));
+                                updateScout(scout.id, { shotgunLayers: newLayers });
+                              }
+                            }}
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                            disabled={scout.active}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          {Array.from({ length: scout.shotgunLayers || 1 }).map((_, index) => (
+                            <div key={index}>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                Range for Layer {index + 1}
+                              </label>
+                              <input
+                                type="number"
+                                min="1"
+                                max="100"
+                                value={(scout.shotgunRanges || [6])[index] || 6}
+                                onChange={(e) => {
+                                  const newRanges = [...(scout.shotgunRanges || [6])];
+                                  newRanges[index] = parseInt(e.target.value);
+                                  updateScout(scout.id, { shotgunRanges: newRanges });
+                                }}
+                                className="w-full px-2 py-1 text-xs rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-sky-dark"
+                                disabled={scout.active}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 {scout.active && scout.activeNodeId && (
                   <div className="text-xs text-gray-600">
