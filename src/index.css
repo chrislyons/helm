@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default theme - Sky (preserved original colors) */
+:root {
+  --color-sky-light: #E6F3FF;
+  --color-sky-medium: #B3D9FF;
+  --color-sky-dark: #80BFFF;
+  --color-sky-accent: #CCE5FF;
+  --color-sky-divider: #D9EBFF;
+}
+
+/* Sea theme - Deep Ocean */
+:root[data-theme="nautical"] {
+  --color-sky-light: #E8F4F8;
+  --color-sky-medium: #A8D5E2;
+  --color-sky-dark: #5A9FB8;
+  --color-sky-accent: #C5E3ED;
+  --color-sky-divider: #D6EBF2;
+}
+
+/* Sunset theme - Sunset Horizon */
+:root[data-theme="dusk"] {
+  --color-sky-light: #FFE9E0;
+  --color-sky-medium: #FFB899;
+  --color-sky-dark: #FF8A5C;
+  --color-sky-accent: #FFD4C2;
+  --color-sky-divider: #FFD9C8;
+}
+
+/* Storm theme - Dark Waters */
+:root[data-theme="storm"] {
+  --color-sky-light: #D4D8DC;
+  --color-sky-medium: #99A3AE;
+  --color-sky-dark: #5C6B7D;
+  --color-sky-accent: #B8C1CA;
+  --color-sky-divider: #C4CACD;
+}
+
+/* Sunrise theme - Morning Light */
+:root[data-theme="dawn"] {
+  --color-sky-light: #FFF0F0;
+  --color-sky-medium: #FFCCD5;
+  --color-sky-dark: #FF99AA;
+  --color-sky-accent: #FFE0E6;
+  --color-sky-divider: #FFE5EB;
+}
+
+/* Forest theme - Medieval European Woodland */
+:root[data-theme="forest"] {
+  --color-sky-light: #D8E3DC;
+  --color-sky-medium: #8FAD96;
+  --color-sky-dark: #4D6C54;
+  --color-sky-accent: #C3D4CA;
+  --color-sky-divider: #CFE0D6;
+}
+
+/* Arctic theme - Frozen Tundra */
+:root[data-theme="arctic"] {
+  --color-sky-light: #F0F8FF;
+  --color-sky-medium: #CFE4F5;
+  --color-sky-dark: #A0C8E8;
+  --color-sky-accent: #E3F0FA;
+  --color-sky-divider: #E8F3FC;
+}
+
+/* Magic theme - Lilac */
+:root[data-theme="magic"] {
+  --color-sky-light: #F3E5F5;
+  --color-sky-medium: #E1BEE7;
+  --color-sky-dark: #CE93D8;
+  --color-sky-accent: #F0D9F5;
+  --color-sky-divider: #EDD5F2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}

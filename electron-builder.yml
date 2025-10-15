@@ -1,0 +1,14 @@
+appId: helm
+productName: Helm
+directories:
+  output: release
+files:
+  - dist/**
+  - dist-electron/**
+  - package.json
+mac:
+  target:
+    - dmg
+  category: public.app-category.productivity
+  icon: build/icons/icon.icns
+artifactName: "${productName}-${version}-${os}-${arch}"

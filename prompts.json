@@ -1,0 +1,14 @@
+{
+  "scout": {
+    "system": "Please decide whether to expand or cull the current node based on the instructions provided. The node is a possible continuation of the previous context. Expansion will create more continuations from the current node. Culling will delete the current node.",
+    "userTemplate": "Instructions: {instructions}\n\nPrevious context:\n{context}\n\nCurrent node:\n{currentNode}\n\nPlease end your response with either <decision>expand</decision> or <decision>cull</decision>."
+  },
+  "copilot": {
+    "system": "Please decide whether to expand or cull the current node based on the instructions provided. The node is a possible continuation of the previous context. Expansion will create more continuations from the current node. Culling will delete the current node.",
+    "userTemplate": "Instructions: {instructions}\n\nPrevious context:\n{context}\n\nCurrent node:\n{currentNode}\n\nPlease end your response with either <decision>expand</decision> or <decision>cull</decision>."
+  },
+  "witness": {
+    "system": "Please evaluate the possible continuations of the previous context and select the best option according to the provided instructions.",
+    "userTemplate": "Instructions: {instructions}\n\nPrevious context:\n{parentBranch}\n\nContinuations:\n{choices}\n\nPlease end your response with <choice>X</choice> where X is the number of the best continuation."
+  }
+}
