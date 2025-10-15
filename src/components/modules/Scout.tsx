@@ -407,11 +407,24 @@ const Scout: React.FC = () => {
                           checked={scout.shotgunEnabled || false}
                           onChange={(e) => {
                             const enabled = e.target.checked;
-                            updateScout(scout.id, {
-                              shotgunEnabled: enabled,
-                              shotgunLayers: enabled ? (scout.shotgunLayers || 1) : undefined,
-                              shotgunRanges: enabled ? (scout.shotgunRanges || [6]) : undefined,
-                            });
+                            if (enabled) {
+                              const layers = scout.shotgunLayers || 1;
+                              const ranges = scout.shotgunRanges || [];
+                              const newRanges = Array.from({ length: layers }, (_, i) =>
+                                ranges[i] !== undefined ? ranges[i] : 6
+                              );
+                              updateScout(scout.id, {
+                                shotgunEnabled: true,
+                                shotgunLayers: layers,
+                                shotgunRanges: newRanges,
+                              });
+                            } else {
+                              updateScout(scout.id, {
+                                shotgunEnabled: false,
+                                shotgunLayers: undefined,
+                                shotgunRanges: undefined,
+                              });
+                            }
                           }}
                           className="rounded border-gray-300 focus:ring-sky-dark"
                           disabled={scout.active}
@@ -628,11 +641,24 @@ const Scout: React.FC = () => {
                         checked={scout.shotgunEnabled || false}
                         onChange={(e) => {
                           const enabled = e.target.checked;
-                          updateScout(scout.id, {
-                            shotgunEnabled: enabled,
-                            shotgunLayers: enabled ? (scout.shotgunLayers || 1) : undefined,
-                            shotgunRanges: enabled ? (scout.shotgunRanges || [6]) : undefined,
-                          });
+                          if (enabled) {
+                            const layers = scout.shotgunLayers || 1;
+                            const ranges = scout.shotgunRanges || [];
+                            const newRanges = Array.from({ length: layers }, (_, i) =>
+                              ranges[i] !== undefined ? ranges[i] : 6
+                            );
+                            updateScout(scout.id, {
+                              shotgunEnabled: true,
+                              shotgunLayers: layers,
+                              shotgunRanges: newRanges,
+                            });
+                          } else {
+                            updateScout(scout.id, {
+                              shotgunEnabled: false,
+                              shotgunLayers: undefined,
+                              shotgunRanges: undefined,
+                            });
+                          }
                         }}
                         className="rounded border-gray-300 focus:ring-sky-dark"
                         disabled={scout.active}
