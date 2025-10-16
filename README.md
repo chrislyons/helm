@@ -1,4 +1,4 @@
-# Helm
+# Helm (fork of Shoalstone's Helm)
 
 A variant of Janus' [Loom](https://github.com/socketteer/loom) and cosmicoptima's [Obsidian implementation](https://github.com/cosmicoptima/loom) with an emphasis on autonomous exploration and complex tree management.
 
