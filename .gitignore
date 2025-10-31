@@ -16,3 +16,6 @@ node_modules/
 .DS_Store
 **/.DS_Store
 *.log
+
+# Claude Code scratch space (temporary notes, not tracked)
+.claude/scratch/
