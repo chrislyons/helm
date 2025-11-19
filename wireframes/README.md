@@ -20,7 +20,7 @@ Each version is contained in its own folder (e.g., `v1.0/`). Within each version
 
 ## Current Version
 
-**v1.0** (Initial Release)
+**v1.1** (Enhanced Documentation)
 
 ### Topics Covered
 
@@ -34,10 +34,24 @@ Each version is contained in its own folder (e.g., `v1.0/`). Within each version
 | `state-schema` | Data models and persistence structure |
 | `deployment-infrastructure` | Build pipeline and packaging |
 
+### v1.1 Improvements
+
+- **Enhanced detail**: More comprehensive notes with code examples
+- **Better organization**: Clearer section structure in notes files
+- **Additional context**: Technical decisions and rationale documented
+- **Improved diagrams**: More detailed Mermaid syntax with subgraphs
+- **Cross-references**: Links between related diagrams and docs
+
 ### Not Included
 
 - `authentication-authorization` - Helm has no auth system (user provides own API key)
 - `database-schema` - Replaced with `state-schema` (localStorage + JSON files)
+
+## Previous Versions
+
+### v1.0 (Initial Release)
+- Initial wireframe documentation
+- Basic diagram coverage for all topics
 
 ## Viewing Diagrams
 
